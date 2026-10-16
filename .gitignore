@@ -1,0 +1,18 @@
+# Private inputs, generated builds and signing material
+*.apk
+*.p12
+*.jks
+*.keystore
+password*.txt
+signing/
+decoded/
+build/
+dist/
+tools/
+upload/
+recovered/
+__pycache__/
+*.pyc
+*Private-Signing*
+*Development-Checkpoint*
+源码.zip

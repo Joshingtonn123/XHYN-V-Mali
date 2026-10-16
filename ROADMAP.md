@@ -1,5 +1,7 @@
 # XHYN V Reborn — combined roadmap
 
+> **0.1 status — 16 October 2026:** The language and launcher changes are available in the 0.1 test release. Host/emulator checks passed; phone testing is pending. Selected native performance work remains partial or blocked by missing matching source. See [CHANGELOG.md](CHANGELOG.md) and [the source notes](docs/SOURCE.md). The original numbered proposal below is retained as a planning reference, not a completion checklist. Item 8 (BCn removal) was not selected and is not included.
+
 The uploaded DXVK-GPLALL 2.6.8 APK is the main development base. The 845 native Vulkan variant remains experimental, with its modifications deferred until the DXVK base is refined.
 
 This combines the language, reliability, launcher, and performance suggestions into 34 tasks. All checkboxes describe planned work. Adding this document does not mean the APK features have been implemented or their performance verified.
@@ -66,3 +68,4 @@ The 845 native Vulkan track remains deferred. Revisit its black-screen problem a
 Use the same device, game files, driver version, resolution, graphics settings, FPS limit, save/route, and comparable starting temperatures. Record cache state so first-run compilation and warmed runs are not mixed. Compare typical frame times, slow-frame percentiles, stutter events, memory growth, thermal behavior, image correctness, controls, and session completion.
 
 Keep the current engine/renderer pair together while establishing the language baseline. A feature is complete only after implementation and relevant checks; a performance gain requires comparable device measurements. None of the proposed library changes is a verified fix for the existing long-session crash.
+
