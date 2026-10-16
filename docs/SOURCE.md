@@ -13,7 +13,7 @@ DXVK is a graphics API implementation. Its upstream documentation explicitly sup
 
 For this supplied APK, the inspected payloads are ARM64 ELF shared libraries. The launcher enters the native engine through SDL's `nativeRunMain`. The packaged-library inspection did not identify a bundled Wine, FEX, Box64 or QEMU runtime. This is evidence about the inspected package, not a claim that the complete original build process or every upstream dependency has been independently reproduced.
 
-The deferred experimental **native Vulkan renderer** is a different graphics backend. The current DXVK base already has native ARM64 CPU execution; switching the graphics backend is separate work.
+The deferred experimental **native Vulkan renderer** is a different graphics backend. This Chinese Android port already has native ARM64 CPU execution; switching the graphics backend is separate work.
 
 ## What source is included?
 
@@ -27,7 +27,7 @@ The [verification directory](../verification) contains package checks, native pa
 - The exact custom DXVK patch set used for the supplied renderer binaries.
 - A complete public rebuild from source of the entire APK.
 
-An unverified archive was supplied during development. Its receipt does not establish permission to redistribute proprietary engine code, so that archive is excluded. Decompiled original launcher code, game data, private signing material and private development checkpoints are also excluded.
+Older source code was supplied during development, but it does not fully match the engine and custom DXVK build used here. This public repository contains our modification layer. Proprietary engine code, decompiled original launcher code, game data, private signing material and private development checkpoints are excluded.
 
 Upstream open-source component links are listed in [CREDITS.md](CREDITS.md). An upstream repository is not a substitute for the missing exact custom changes. This repository must not be described as the complete open-source GTA V port.
 
