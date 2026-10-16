@@ -1,0 +1,34 @@
+/*
+ * Copyright (c) 2015-2016 The Khronos Group Inc.
+ * Copyright (c) 2015-2016 Valve Corporation
+ * Copyright (c) 2015-2016 LunarG, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+/* Need to define dispatch table
+ * Core struct can then have ptr to dispatch table at the top
+ * Along with object ptrs for current and next OBJ
+ */
+/* Sub type of structure for instance and device loader ext of CreateInfo.
+ * When sType == VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO
+ * or sType == VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO
+ * then VkLayerFunction indicates struct type pointed to by pNext
+ */
+/*
+ * When creating the device chain the loader needs to pass
+ * down information about it's device structure needed at
+ * the end of the chain. Passing the data via the
+ * VkLayerDeviceInfo avoids issues with finding the
+ * exact instance being used.
+ */
