@@ -1,0 +1,17 @@
+{
+  "result": "PASS",
+  "package": "com.xhynph.xhynv.reborn",
+  "version_name": "0.1",
+  "version_code": "1",
+  "app_label": "XHYN V",
+  "min_sdk": "30",
+  "target_sdk": "36",
+  "dex_classes": 966,
+  "new_reborn_helpers": 38,
+  "all_original_classes_retained": true,
+  "helper_method_references_resolved": 188,
+  "helper_outgoing_app_references_checked": 306,
+  "original_stub_target_methods_retained": true,
+  "packaged_native_fingerprints_match": true,
+  "scope": "Static APK/DEX inspection; Android runtime verifier, device UI and gameplay remain untested"
+}
