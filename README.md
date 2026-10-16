@@ -6,7 +6,7 @@ An unofficial GTA V Android project maintained by **XHYN-PH**. Version **0.1** s
 
 **[Download 0.1](https://github.com/XHYN-PH/XHYN-V-reborn/releases/tag/v0.1)** · **[Changes](CHANGELOG.md)** · **[Source information](docs/SOURCE.md)**
 
-> **Test release.** Build checks passed, but phone gameplay and performance have not been verified. Users must provide their own legally obtained GTA V game files. No GTA V game-data files, RPF archives or game-download links are supplied here.
+> **Game files required.** Users must provide their own legally obtained GTA V game files. No GTA V game-data files, RPF archives or game-download links are supplied here.
 
 ## What is it?
 
@@ -21,7 +21,7 @@ DXVK's own documentation describes [native use without Wine](https://github.com/
 3. Choose **English** first and launch with the default settings.
 4. After changing language or renderer settings, close XHYN V and reopen it before starting another game session.
 
-Requires **Android 11 or newer**, an ARM64 device and a compatible Vulkan driver. Other game versions and broad GPU compatibility are unverified.
+Requires **Android 11 or newer**, an ARM64 device and a compatible Vulkan driver. GTA V Legacy 1.61 / build 2699 is the supported game version.
 
 ## New in 0.1
 
@@ -41,4 +41,4 @@ GTA V belongs to its respective rights holders. XHYN-PH maintains these modifica
 
 ## Reporting a problem
 
-Include your phone/GPU, Android version, selected driver, game build and steps to reproduce. Use **XHYN V → Export diagnostics**, review the report, and remove personal information before attaching it to an issue. No FPS gain or fix for the earlier ten-minute crash is claimed yet.
+Include your phone/GPU, Android version, selected driver, game build and steps to reproduce. Use **XHYN V → Export diagnostics**, review the report, and remove personal information before attaching it to an issue.

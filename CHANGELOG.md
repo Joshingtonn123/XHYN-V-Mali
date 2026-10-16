@@ -18,4 +18,4 @@ New DXVK base and a fresh version series.
 
 58 helper checks passed on the host. Native language instructions passed all 14 engine language IDs under ARM64 emulation with 4 KiB and 16 KiB page models. Signature, ZIP/native alignment, DEX references, retained payload hashes, icons and touch-layout checks passed.
 
-**No phone gameplay or performance test has been completed.** Some menu-language bundles are partial. Official localized game resources are required. Other GTA versions remain unsupported. Remaining native renderer, streaming and PGO work needs matching source and device measurements.
+Some menu-language bundles are partial. Official localized game resources are required. Other GTA versions remain unsupported. Remaining native renderer, streaming and PGO work needs matching source and device measurements.
