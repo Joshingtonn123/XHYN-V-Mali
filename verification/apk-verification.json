@@ -1,0 +1,24 @@
+{
+  "file": "XHYN-V-0.1.apk",
+  "bytes": 75503645,
+  "sha256": "34c1183d6b74336a0b5825ce896ccb9b46c00ab654bb39ae486226a3edb0ce4d",
+  "signature_verified": true,
+  "stored_native_libraries_aligned_to": 16384,
+  "native_fingerprints": {
+    "libSDL2.so": "7caa353f3bf21a4800bd192e71d819f14ff73e3101ecbe70d5294a9645934ed6",
+    "libadrenotools.so": "85bae37bc9fbce538698e70853d2d1f373b6698217755009408b0ab6665b9b33",
+    "libdxvk_d3d11.so": "e57bcdb563f2a08f88863963916d1d4a0f57adde1ccc0d207fd2e8ac389ab373",
+    "libdxvk_dxgi.so": "312f3f16d5a17c5eec1dbfc476be1fe4916aa3d1542c4d77d983e27436f4a465",
+    "libfile_redirect_hook.so": "bdd8d8eef802579438506d6d8cc0edb89561857753b215da70a938c09f3230cc",
+    "libgsl_alloc_hook.so": "9e06606c5e84703d26f06ad82b3034c7607b1312c1250af3a9c2208d362c1b99",
+    "libgtav.so": "1ba6de9319498877b831620d1972d2edbed87d58573dde3ce3265cffebf0281c",
+    "libgtav_bcn.so": "726586bf8eb65eb41779da66866a40682fc1acdf498e0b307774cbb082c37768",
+    "libgtav_particle_probe.so": "07aadcd2fb154b85f2b24bcc330796d835df468c8760d81c755e21534dfca9ff",
+    "libgtav_vulkan.so": "ffa9682ca55fb506402787d5788735f1b7707ecef1598bc6bbb6f49ffe09f034",
+    "libgtavunrar.so": "cc12f23646beb9bf122387363c75236cf43badcc00b4563ae8c0c236483467da",
+    "libhook_impl.so": "6876f1c222fa6cff8b55fe6643a91121d4ec2dbd78c3b2e7a76b6a28f1189648",
+    "libmain_hook.so": "b629a9f6652d458219764951c6aafaf6af8b1b9f096f6062a3d73c7617f3afe5",
+    "libxhyn_locale.so": "2403dca28dd8d6d6dd4340ff217f71e6b4bd8e5c36c23f4b201a139a39e993da"
+  },
+  "device_gameplay_tested": false
+}

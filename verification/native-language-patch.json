@@ -1,0 +1,133 @@
+{
+  "source_sha256": "b0464aa55843ebab78cb9993ec89146c08c29145c58a62f9197f2348248149f5",
+  "patched_sha256": "1ba6de9319498877b831620d1972d2edbed87d58573dde3ce3265cffebf0281c",
+  "edits": [
+    {
+      "name": "Accept device language at startup/resume call",
+      "address": "0xe2568c",
+      "offset": 14816908,
+      "before": "0a000094",
+      "after": "20008052"
+    },
+    {
+      "name": "Accept device language at startup/resume call",
+      "address": "0xe25e84",
+      "offset": 14818948,
+      "before": "0cfeff97",
+      "after": "20008052"
+    },
+    {
+      "name": "Default text formatting: non-Asian",
+      "address": "0x2163a3c",
+      "offset": 34994748,
+      "before": "20008052",
+      "after": "00008052"
+    },
+    {
+      "name": "Default game language: English",
+      "address": "0x2163a44",
+      "offset": 34994756,
+      "before": "a0018052",
+      "after": "20008052"
+    },
+    {
+      "name": "Default game language: English",
+      "address": "0x2163a58",
+      "offset": 34994776,
+      "before": "a0018052",
+      "after": "20008052"
+    },
+    {
+      "name": "Default supported language: English",
+      "address": "0x2163a90",
+      "offset": 34994832,
+      "before": "1f340071",
+      "after": "1f040071"
+    },
+    {
+      "name": "Dedicated language resource storage",
+      "address": "0xe257b4",
+      "offset": 14817204,
+      "before": "680240f9f50300aae00313aa089143f9",
+      "after": "65666967730000000000000000000000"
+    },
+    {
+      "name": "Dedicated language resource storage",
+      "address": "0xe257d4",
+      "offset": 14817236,
+      "before": "a1120054680240f942c0ffb0428c2591",
+      "after": "616d65726963616e0000000000000000"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x2163a9c",
+      "offset": 34994844,
+      "before": "0027ffd000e80c91",
+      "after": "0066ffd000d01e91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x2163aa8",
+      "offset": 34994856,
+      "before": "0027ffd000e80c91",
+      "after": "0066ffd000d01e91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x2163aec",
+      "offset": 34994924,
+      "before": "0227ffd042e80c91",
+      "after": "0266ffd042d01e91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x21651b4",
+      "offset": 35000756,
+      "before": "0327ff9063e80c91",
+      "after": "0366ff9063501f91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x2165214",
+      "offset": 35000852,
+      "before": "0327ff9063e80c91",
+      "after": "0366ff9063501f91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x2165234",
+      "offset": 35000884,
+      "before": "0327ff9063e80c91",
+      "after": "0366ff9063501f91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x21665b8",
+      "offset": 35005880,
+      "before": "e326fff063e80c91",
+      "after": "e365fff063501f91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x21665fc",
+      "offset": 35005948,
+      "before": "e326fff063e80c91",
+      "after": "e365fff063501f91"
+    },
+    {
+      "name": "Language resource pointer",
+      "address": "0x216663c",
+      "offset": 35006012,
+      "before": "e326fff063e80c91",
+      "after": "e365fff063501f91"
+    }
+  ],
+  "locale_calls": [
+    "0xe2568c",
+    "0xe25e84"
+  ],
+  "renderer_changed": false,
+  "original_unwind_sections_unchanged": true,
+  "font_storage": "0xe257b4",
+  "archive_storage": "0xe257d4"
+}

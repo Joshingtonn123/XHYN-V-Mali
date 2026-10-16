@@ -1,0 +1,55 @@
+{
+  "result": "PASS",
+  "layout_display_changes": {
+    "name": 169,
+    "message": 1075,
+    "origin": 1075,
+    "0": 785,
+    "3": 474,
+    "2": 91,
+    "1": 49,
+    "label": 499
+  },
+  "layout_ids_commands_geometry_and_schema_unchanged": true,
+  "default_ini_changes": {
+    "('[overlay]', 'border_color')": [
+      "#8068dfae",
+      "#80b79aff"
+    ]
+  },
+  "original_native_libraries_preserved": {
+    "lib/arm64-v8a/libSDL2.so": "7caa353f3bf21a4800bd192e71d819f14ff73e3101ecbe70d5294a9645934ed6",
+    "lib/arm64-v8a/libadrenotools.so": "85bae37bc9fbce538698e70853d2d1f373b6698217755009408b0ab6665b9b33",
+    "lib/arm64-v8a/libdxvk_d3d11.so": "e57bcdb563f2a08f88863963916d1d4a0f57adde1ccc0d207fd2e8ac389ab373",
+    "lib/arm64-v8a/libdxvk_dxgi.so": "312f3f16d5a17c5eec1dbfc476be1fe4916aa3d1542c4d77d983e27436f4a465",
+    "lib/arm64-v8a/libfile_redirect_hook.so": "bdd8d8eef802579438506d6d8cc0edb89561857753b215da70a938c09f3230cc",
+    "lib/arm64-v8a/libgsl_alloc_hook.so": "9e06606c5e84703d26f06ad82b3034c7607b1312c1250af3a9c2208d362c1b99",
+    "lib/arm64-v8a/libgtav_bcn.so": "726586bf8eb65eb41779da66866a40682fc1acdf498e0b307774cbb082c37768",
+    "lib/arm64-v8a/libgtav_particle_probe.so": "07aadcd2fb154b85f2b24bcc330796d835df468c8760d81c755e21534dfca9ff",
+    "lib/arm64-v8a/libgtav_vulkan.so": "ffa9682ca55fb506402787d5788735f1b7707ecef1598bc6bbb6f49ffe09f034",
+    "lib/arm64-v8a/libgtavunrar.so": "cc12f23646beb9bf122387363c75236cf43badcc00b4563ae8c0c236483467da",
+    "lib/arm64-v8a/libhook_impl.so": "6876f1c222fa6cff8b55fe6643a91121d4ec2dbd78c3b2e7a76b6a28f1189648",
+    "lib/arm64-v8a/libmain_hook.so": "b629a9f6652d458219764951c6aafaf6af8b1b9f096f6062a3d73c7617f3afe5"
+  },
+  "original_brand_icon_resources": 11,
+  "frame_analysis_fixture": {
+    "sample_frames": 100,
+    "sample_duration_s": 1.09,
+    "mean_fps": 91.74311926605505,
+    "frame_ms_p50": 10.0,
+    "frame_ms_p95": 10.0,
+    "frame_ms_p99": 10.0,
+    "percentile_method": "nearest rank",
+    "one_percent_low_fps": 10.0,
+    "histogram": {
+      "<= 16.667 ms": 99,
+      "<= 100 ms": 1
+    },
+    "classification_counts": {
+      "GPU_BOUND": 100
+    },
+    "invalid_or_truncated_records": 2,
+    "scope": "Captured native frame windows only; not necessarily the whole 10-minute session. Overlapping frames are deduplicated by timestamp and frame number."
+  },
+  "limits": "Static/source checks and synthetic host fixtures; no device UI or gameplay validation"
+}

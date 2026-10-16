@@ -1,0 +1,59 @@
+PASS game mapping zh-TW
+PASS game mapping en
+PASS game mapping fr
+PASS game mapping de
+PASS game mapping it
+PASS game mapping ja
+PASS game mapping ko
+PASS game mapping pl
+PASS game mapping pt
+PASS game mapping ru
+PASS game mapping es
+PASS game mapping es-mx
+PASS game mapping zh
+PASS game mapping fil
+PASS game mapping id
+PASS game mapping tr
+PASS game mapping vi
+PASS device menu language keeps game English until explicit choice
+PASS explicit menu selection reaches game mapping
+PASS real Spanish bundle loads
+PASS unmapped menu text falls back to English
+PASS absent UI bundle falls back to English
+PASS two workers remain the base default
+PASS Auto emits renderer worker value zero
+PASS enabled custom document is included after managed workers
+PASS disabled snapshot contains the last enabled document
+PASS editing while disabled preserves the snapshot
+PASS disabled document is excluded from effective config
+PASS out-of-range worker count rejected
+PASS failed edit does not enable custom options
+PASS native quoted worker syntax accepted
+PASS D3D9-only option rejected
+PASS uncoordinated interop override rejected
+PASS invalid UTF-8 rejected
+PASS engine hardcoded worker fallback is bypassed
+PASS effective configuration has a real absolute path
+PASS renderer logging defaults to off
+PASS persistent renderer cache directories exist
+PASS changing an initialized driver requires a fresh process
+PASS different driver bytes get different cache identities
+PASS volatile addresses and status tail do not invalidate renderer cache
+PASS actual system fallback does not share custom driver cache
+PASS low-memory exit is reportable
+PASS unexplained SIGKILL is reportable
+PASS isolated probe failure is excluded
+PASS normal self exit is excluded
+PASS explicit quit marker matches only immediate SIGKILL
+PASS quit marker cannot hide a native fault
+PASS stale quit marker cannot hide a later termination
+PASS different PID is not suppressed
+PASS automatic cleanup timeout remains reportable
+PASS only an explicit requested quit is suppressed
+PASS first preparation state is posted
+PASS rapid redundant progress is coalesced
+PASS completion bypasses throttling
+PASS hide/state transition bypasses throttling
+PASS atomic write refuses symbolic-link destinations
+PASS bounded local diagnostic export succeeds
+TOTAL 58 host checks; Android services are fixtures

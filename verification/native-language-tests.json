@@ -1,0 +1,208 @@
+{
+  "result": "PASS",
+  "language_matrix": [
+    {
+      "page_size": 4096,
+      "rl_language_id": 0,
+      "archive": "chinese",
+      "font": "chinese",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 1,
+      "archive": "american",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 2,
+      "archive": "french",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 3,
+      "archive": "german",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 4,
+      "archive": "italian",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 5,
+      "archive": "japanese",
+      "font": "japanese",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 6,
+      "archive": "korean",
+      "font": "korean",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 7,
+      "archive": "polish",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 8,
+      "archive": "portuguese",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 9,
+      "archive": "portuguese",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 10,
+      "archive": "russian",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 11,
+      "archive": "spanish",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 12,
+      "archive": "mexican",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 4096,
+      "rl_language_id": 13,
+      "archive": "chinesesimp",
+      "font": "chinesesimp",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 0,
+      "archive": "chinese",
+      "font": "chinese",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 1,
+      "archive": "american",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 2,
+      "archive": "french",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 3,
+      "archive": "german",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 4,
+      "archive": "italian",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 5,
+      "archive": "japanese",
+      "font": "japanese",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 6,
+      "archive": "korean",
+      "font": "korean",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 7,
+      "archive": "polish",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 8,
+      "archive": "portuguese",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 9,
+      "archive": "portuguese",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 10,
+      "archive": "russian",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 11,
+      "archive": "spanish",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 12,
+      "archive": "mexican",
+      "font": "efigs",
+      "result": "PASS"
+    },
+    {
+      "page_size": 16384,
+      "rl_language_id": 13,
+      "archive": "chinesesimp",
+      "font": "chinesesimp",
+      "result": "PASS"
+    }
+  ],
+  "negative_and_reentrancy_checks": "PASS",
+  "unwind_and_dynamic_sections_unchanged": true,
+  "helper_needed": [
+    "libc.so",
+    "libdl.so"
+  ],
+  "scope": "ARM64 emulation and ELF checks; Android loading, cache coherence, actual game resources and gameplay remain untested"
+}
