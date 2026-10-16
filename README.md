@@ -2,11 +2,15 @@
 
 # XHYN V Reborn
 
-An unofficial GTA V Android project maintained by **XHYN-PH**. Version **0.1** starts again from the DXVK base, with English translations, language selection and the violet XHYN V theme.
+An unofficial native GTA V Android project by **XHYN-PH**, based on the **Chinese GTA V Android port**. It brings English language support, customizable touch controls and the violet XHYN V theme.
 
-**[Download 0.1](https://github.com/XHYN-PH/XHYN-V-reborn/releases/tag/v0.1)** · **[Changes](CHANGELOG.md)** · **[Source information](docs/SOURCE.md)**
+**[Download 0.1](https://github.com/XHYN-PH/XHYN-V-reborn/releases/tag/v0.1)** · **[Source information](docs/SOURCE.md)**
 
 > **Game files required.** Users must provide their own legally obtained GTA V game files. No GTA V game-data files, RPF archives or game-download links are supplied here.
+
+## Why Reborn?
+
+My previous XHYN V repository was removed, so I had to start over. **Reborn** marks that fresh start: a new home for the project, beginning again at **version 0.1**.
 
 ## What is it?
 
@@ -22,14 +26,6 @@ DXVK's own documentation describes [native use without Wine](https://github.com/
 4. After changing language or renderer settings, close XHYN V and reopen it before starting another game session.
 
 Requires **Android 11 or newer**, an ARM64 device and a compatible Vulkan driver. GTA V Legacy 1.61 / build 2699 is the supported game version.
-
-## New in 0.1
-
-- English launcher, trainer labels and touch layouts.
-- A supported menu language also selects the game language on the next full launch. No explicit selection or an unsupported game language uses English in game.
-- Violet theme, XHYN V name and original V icon.
-- DXVK configuration switch with a recovery copy, compiler-worker and refresh controls.
-- Clearer exit reports, persistent renderer-cache identities and diagnostic export.
 
 Some menu translations are incomplete. Other game languages require their corresponding text/font resources. Missing game packs are not automatically detected and replaced with English.
 

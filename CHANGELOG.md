@@ -2,7 +2,7 @@
 
 ## 0.1 — 16 October 2026
 
-New DXVK base and a fresh version series.
+A fresh start based on the Chinese GTA V Android port, with a new version series.
 
 - Translated the inventoried launcher text, trainer display strings and 89 touch layouts into English.
 - Added menu/game-language selection with English defaults and fallback for unsupported selections.
