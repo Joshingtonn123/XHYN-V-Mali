@@ -1,21 +1,16 @@
-# Changes
+# Changelog
 
 ## 0.1 — 16 October 2026
 
-A fresh start based on the Chinese GTA V Android port, with a new version series.
+Initial release of XHYN V Reborn, based on the Chinese GTA V Android port.
 
-- Translated the inventoried launcher text, trainer display strings and 89 touch layouts into English.
-- Added menu/game-language selection with English defaults and fallback for unsupported selections.
-- Patched this exact engine's Chinese-only language gate and separated its font and text-archive selection.
-- Restored the original violet XHYN V theme and V icon.
-- Added a custom DXVK configuration editor/switch with a preserved disabled snapshot.
-- Added compiler-worker and current-resolution refresh controls. Workers retain the base default of 2.
-- Added persistent cache identities using library, OS and actual driver information.
-- Improved exit classification, native-main return reporting, fresh-process restart handling and bounded SDL shutdown.
-- Added bounded local diagnostics, a ten-minute comparison marker and access to the existing benchmark.
+- Translated launcher text, trainer labels and 89 touch layouts into English.
+- Added linked menu and in-game language selection. English is used by default and for unsupported selections.
+- Fixed the engine check that required Chinese system language, along with font and text-file selection.
+- Added a DXVK configuration switch and editor. Your configuration is preserved when the switch is off.
+- Added shader compiler thread and refresh-rate controls.
+- Separated graphics caches by driver and renderer to avoid reusing incompatible caches.
+- Improved startup errors, crash reports, restart and shutdown handling.
+- Added diagnostic export and local performance recording.
 
-### Validation and limits
-
-58 helper checks passed on the host. Native language instructions passed all 14 engine language IDs under ARM64 emulation with 4 KiB and 16 KiB page models. Signature, ZIP/native alignment, DEX references, retained payload hashes, icons and touch-layout checks passed.
-
-Some menu-language bundles are partial. Official localized game resources are required. Other GTA versions remain unsupported. Remaining native renderer, streaming and PGO work needs matching source and device measurements.
+Other game languages require their matching text and font files. Some menu translations are incomplete. GTA V Legacy 1.61 / build 2699 remains the supported game version.
