@@ -1,0 +1,22 @@
+{
+  "apktool": {
+    "version": "2.12.1",
+    "path": "tools/apktool.jar",
+    "url": "https://github.com/iBotPeaches/Apktool/releases/download/v2.12.1/apktool_2.12.1.jar",
+    "sha256": "66cf4524a4a45a7f56567d08b2c9b6ec237bcdd78cee69fd4a59c8a0243aeafa"
+  },
+  "zig": {
+    "pip_package": "ziglang",
+    "version": "0.13.0",
+    "target_directory": "tools/zig"
+  },
+  "python_packages": {
+    "pyelftools": "0.33",
+    "capstone": "5.0.9",
+    "unicorn": "2.1.4",
+    "androguard": "4.1.4",
+    "loguru": "0.7.3"
+  },
+  "java": "17",
+  "android_tool_manifest": "recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain-manifest.json"
+}
