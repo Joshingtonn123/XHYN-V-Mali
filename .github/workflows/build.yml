@@ -1,6 +1,9 @@
 name: Build XHYN-V APK
 
 on:
+  push:
+    branches:
+      - "**"
   workflow_dispatch:
 
 permissions:
