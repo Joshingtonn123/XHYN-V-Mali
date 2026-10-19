@@ -33,18 +33,16 @@ jobs:
       # Method 1: use the repository's existing builder exactly as requested.
       - name: "Method 1 — existing Python APK builder"
         id: method1
-        continue-on-error: true
         shell: bash
         run: |
-          set -uo pipefail
+          set -euo pipefail
           mkdir -p modifications/dist modifications/reports
           python modifications/scripts/build_apk.py
 
       # Method 2: fetch build tools, optionally decode a user-provided APK,
       # then retry the existing Python builder with those tools available.
       - name: "Set up Android SDK tools for fallback methods"
-        if: steps.method1.outcome != 'success'
-        continue-on-error: true
+        if: always() && steps.method1.outcome != 'success'
         uses: android-actions/setup-android@v3
         with:
           cmdline-tools-version: '12266719'
@@ -54,8 +52,7 @@ jobs:
 
       - name: "Method 2 — install Apktool and Android build tools"
         id: method2
-        if: steps.method1.outcome != 'success'
-        continue-on-error: true
+        if: always() && steps.method1.outcome != 'success'
         shell: bash
         run: |
           set -euo pipefail
@@ -76,28 +73,15 @@ jobs:
               out.write(r.read())
           print("Downloaded", asset["name"])
           PY
-          SDK_ROOT_CANDIDATE="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
-          SDKMANAGER="$(find "$SDK_ROOT_CANDIDATE/cmdline-tools" -type f -name sdkmanager -print -quit 2>/dev/null || true)"
-          if [[ -z "$SDKMANAGER" ]]; then
-            SDKMANAGER="$(find /usr/local/lib/android/sdk/cmdline-tools -type f -name sdkmanager -print -quit 2>/dev/null || true)"
-          fi
-          if [[ -z "$SDKMANAGER" ]]; then
-            echo "::error::sdkmanager was not found under the Android SDK command-line tools."
-            exit 1
-          fi
-          SDKMANAGER="$(readlink -f "$SDKMANAGER")"
-          case "$SDKMANAGER" in
-            */cmdline-tools/*/bin/sdkmanager) SDK_ROOT="${SDKMANAGER%%/cmdline-tools/*}" ;;
-            *) SDK_ROOT="$SDK_ROOT_CANDIDATE" ;;
-          esac
+          # setup-android already installs the requested SDK packages above;
+          # do not invoke sdkmanager a second time (that caused exit code 1).
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
           export ANDROID_HOME="$SDK_ROOT"
           export ANDROID_SDK_ROOT="$SDK_ROOT"
-          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
-          "$SDKMANAGER" --install "build-tools;35.0.0" "platform-tools"
           BUILD_TOOLS="$SDK_ROOT/build-tools/35.0.0"
-          test -x "$BUILD_TOOLS/apksigner" || { echo "::error::Android SDK apksigner was not installed."; exit 1; }
-          test -x "$BUILD_TOOLS/zipalign" || { echo "::error::Android SDK zipalign was not installed."; exit 1; }
-          test -f "$BUILD_TOOLS/lib/apksigner.jar" || { echo "::error::Android SDK apksigner.jar was not installed."; exit 1; }
+          test -x "$BUILD_TOOLS/apksigner" || { echo "::error::Android SDK apksigner is missing after setup-android."; exit 1; }
+          test -x "$BUILD_TOOLS/zipalign" || { echo "::error::Android SDK zipalign is missing after setup-android."; exit 1; }
+          test -f "$BUILD_TOOLS/lib/apksigner.jar" || { echo "::error::Android SDK apksigner.jar is missing after setup-android."; exit 1; }
           mkdir -p recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui
           cp "$BUILD_TOOLS/lib/apksigner.jar" recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar
           # If a lawful input APK was added to original-apk/, reconstruct the decoded
@@ -115,8 +99,7 @@ jobs:
       # Apktool + Android SDK zipalign/apksigner, if a decoded workspace exists.
       - name: "Method 3 — direct Apktool build and Android SDK signing"
         id: method3
-        if: steps.method1.outcome != 'success' && steps.method2.outcome != 'success'
-        continue-on-error: true
+        if: always() && steps.method1.outcome != 'success' && steps.method2.outcome != 'success'
         shell: bash
         run: |
           set -euo pipefail
