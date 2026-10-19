@@ -111,14 +111,14 @@ jobs:
             python -c 'import secrets; print(secrets.token_urlsafe(40))' > "$PASSFILE"
             keytool -genkeypair -keystore "$KEY" -storetype PKCS12 -storepass:file "$PASSFILE" -keypass:file "$PASSFILE" -alias xhyn-v-reborn -keyalg RSA -keysize 3072 -validity 10000 -dname "CN=XHYN V, O=XHYN PH, C=PH"
           fi
-          java -jar "$APKTOOL" b "$DECODED" -o modifications/dist/XHYN-V-0.1-unsigned.apk
-          "$BUILD_TOOLS/zipalign" -P 16 -f -v 4 modifications/dist/XHYN-V-0.1-unsigned.apk modifications/dist/XHYN-V-0.1-aligned.apk
-          "$BUILD_TOOLS/apksigner" sign --ks "$KEY" --ks-key-alias xhyn-v-reborn --ks-pass "file:$PASSFILE" --key-pass "file:$PASSFILE" --out modifications/dist/XHYN-V-0.1.apk modifications/dist/XHYN-V-0.1-aligned.apk
-          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs modifications/dist/XHYN-V-0.1.apk > modifications/reports/signature-verification.txt 2>&1
+          java -jar "$APKTOOL" b "$DECODED" -o modifications/dist/XHYN-R-unsigned.apk
+          "$BUILD_TOOLS/zipalign" -P 16 -f -v 4 modifications/dist/XHYN-R-unsigned.apk modifications/dist/XHYN-V-0.1-aligned.apk
+          "$BUILD_TOOLS/apksigner" sign --ks "$KEY" --ks-key-alias xhyn-v-reborn --ks-pass "file:$PASSFILE" --key-pass "file:$PASSFILE" --out modifications/dist/XHYN-R.apk modifications/dist/XHYN-V-0.1-aligned.apk
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs modifications/dist/XHYN-R.apk > modifications/reports/signature-verification.txt 2>&1
           python - <<'PY'
           import hashlib,json,zipfile
           from pathlib import Path
-          apk=Path("modifications/dist/XHYN-V-0.1.apk")
+          apk=Path("modifications/dist/XHYN-R.apk")
           with zipfile.ZipFile(apk) as z:
               bad=z.testzip()
               if bad: raise SystemExit("APK ZIP verification failed: "+bad)
@@ -135,20 +135,20 @@ jobs:
         if: always()
         shell: bash
         run: |
-          if [[ ! -s modifications/dist/XHYN-V-0.1.apk ]]; then
-            echo "::error::All three build methods failed. See the method logs above."
+          if [[ ! -s modifications/dist/XHYN-R.apk ]]; then
+            echo "::error::No XHYN-R.apk was produced. Check the successful build step's output path and logs."
             echo "If no original decoded workspace is committed, add your lawful APK as original-apk/input.apk and rerun."
             exit 1
           fi
-          echo "APK exists: modifications/dist/XHYN-V-0.1.apk"
+          echo "APK exists: modifications/dist/XHYN-R.apk"
 
       - name: Upload APK and verification reports
-        if: always() && hashFiles('modifications/dist/XHYN-V-0.1.apk') != ''
+        if: always() && hashFiles('modifications/dist/XHYN-R.apk') != ''
         uses: actions/upload-artifact@v4
         with:
-          name: XHYN-V-APK
+          name: XHYN-R-APK
           path: |
-            modifications/dist/XHYN-V-0.1.apk
+            modifications/dist/XHYN-R.apk
             modifications/reports/signature-verification.txt
             modifications/reports/apk-verification.json
           if-no-files-found: warn
