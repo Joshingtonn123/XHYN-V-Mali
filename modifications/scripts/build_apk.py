@@ -10,7 +10,7 @@ if not key.exists():
     subprocess.run(['java','sun.security.tools.keytool.Main','-genkeypair','-keystore',str(key),'-storetype','PKCS12','-storepass:file',str(password),'-keypass:file',str(password),'-alias','xhyn-v-reborn','-keyalg','RSA','-keysize','3072','-validity','10000','-dname','CN=XHYN V, O=XHYN PH, C=PH'],check=True);os.chmod(key,0o600)
 fingerprints={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((D/'lib/arm64-v8a').glob('*.so'))}
 (D/'assets/reborn-binary-fingerprints.json').write_text(json.dumps(fingerprints,sort_keys=True,indent=2)+'\n')
-unsigned=OUT/'XHYN-V-0.1-unsigned.apk';final=OUT/'XHYN-V-0.1.apk'
+unsigned=OUT/'XHYN-R-unsigned.apk';final=OUT/'XHYN-R.apk'
 subprocess.run(['java','-jar',str(R.parent/'tools/apktool.jar'),'b',str(D),'-o',str(unsigned)],check=True)
 # Let the Android signer write its own valid alignment extra fields before
 # calculating the signature; manually padding them can be shifted by signing.
