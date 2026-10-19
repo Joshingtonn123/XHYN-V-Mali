@@ -42,13 +42,13 @@ jobs:
 
       # Method 2: fetch build tools, optionally decode a user-provided APK,
       # then retry the existing Python builder with those tools available.
-      - name: "Method 2 — prepare tools and retry Python builder"
-        id: method2
+      - name: "Set up Android SDK tools for fallback methods"
         if: steps.method1.outcome != 'success'
         continue-on-error: true
         uses: android-actions/setup-android@v3
 
       - name: "Method 2 — install Apktool and Android build tools"
+        id: method2
         if: steps.method1.outcome != 'success'
         continue-on-error: true
         shell: bash
@@ -71,10 +71,10 @@ jobs:
               out.write(r.read())
           print("Downloaded", asset["name"])
           PY
-          sdkmanager --install "build-tools;35.0.0" "platform-tools"
           yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "build-tools;35.0.0" "platform-tools"
           mkdir -p recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui
-          cp "$ANDROID_HOME/build-tools/35.0.0/apksigner" recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar
           # If a lawful input APK was added to original-apk/, reconstruct the decoded
           # workspace from it. Otherwise preserve any decoded workspace already present.
           input_apk="$(find original-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)"
