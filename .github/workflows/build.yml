@@ -1,4 +1,4 @@
-name: Build XHYN-V APK
+name: Build XHYN-R APK
 
 on:
   push:
@@ -71,10 +71,30 @@ jobs:
               out.write(r.read())
           print("Downloaded", asset["name"])
           PY
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager --install "build-tools;35.0.0" "platform-tools"
+          SDK_ROOT_CANDIDATE="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          SDKMANAGER="$(find "$SDK_ROOT_CANDIDATE/cmdline-tools" -type f -name sdkmanager -print -quit 2>/dev/null || true)"
+          if [[ -z "$SDKMANAGER" ]]; then
+            SDKMANAGER="$(find /usr/local/lib/android/sdk/cmdline-tools -type f -name sdkmanager -print -quit 2>/dev/null || true)"
+          fi
+          if [[ -z "$SDKMANAGER" ]]; then
+            echo "::error::sdkmanager was not found under the Android SDK command-line tools."
+            exit 1
+          fi
+          SDKMANAGER="$(readlink -f "$SDKMANAGER")"
+          case "$SDKMANAGER" in
+            */cmdline-tools/*/bin/sdkmanager) SDK_ROOT="${SDKMANAGER%%/cmdline-tools/*}" ;;
+            *) SDK_ROOT="$SDK_ROOT_CANDIDATE" ;;
+          esac
+          export ANDROID_HOME="$SDK_ROOT"
+          export ANDROID_SDK_ROOT="$SDK_ROOT"
+          yes | "$SDKMANAGER" --licenses >/dev/null 2>&1 || true
+          "$SDKMANAGER" --install "build-tools;35.0.0" "platform-tools"
+          BUILD_TOOLS="$SDK_ROOT/build-tools/35.0.0"
+          test -x "$BUILD_TOOLS/apksigner" || { echo "::error::Android SDK apksigner was not installed."; exit 1; }
+          test -x "$BUILD_TOOLS/zipalign" || { echo "::error::Android SDK zipalign was not installed."; exit 1; }
+          test -f "$BUILD_TOOLS/lib/apksigner.jar" || { echo "::error::Android SDK apksigner.jar was not installed."; exit 1; }
           mkdir -p recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui
-          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar
+          cp "$BUILD_TOOLS/lib/apksigner.jar" recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar
           # If a lawful input APK was added to original-apk/, reconstruct the decoded
           # workspace from it. Otherwise preserve any decoded workspace already present.
           input_apk="$(find original-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)"
@@ -98,7 +118,8 @@ jobs:
           mkdir -p modifications/dist modifications/reports modifications/signing
           DECODED="modifications/decoded"
           APKTOOL="tools/apktool.jar"
-          BUILD_TOOLS="$ANDROID_HOME/build-tools/35.0.0"
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          BUILD_TOOLS="$SDK_ROOT/build-tools/35.0.0"
           test -f "$DECODED/AndroidManifest.xml" || { echo "::error::No decoded AndroidManifest.xml. Add a lawful input APK at original-apk/ or provide the decoded workspace."; exit 1; }
           test -d "$DECODED/lib/arm64-v8a" || { echo "::error::No ARM64 native libraries in decoded workspace."; exit 1; }
           test -f "$APKTOOL" || { echo "::error::Apktool JAR is unavailable."; exit 1; }
@@ -112,8 +133,8 @@ jobs:
             keytool -genkeypair -keystore "$KEY" -storetype PKCS12 -storepass:file "$PASSFILE" -keypass:file "$PASSFILE" -alias xhyn-v-reborn -keyalg RSA -keysize 3072 -validity 10000 -dname "CN=XHYN V, O=XHYN PH, C=PH"
           fi
           java -jar "$APKTOOL" b "$DECODED" -o modifications/dist/XHYN-R-unsigned.apk
-          "$BUILD_TOOLS/zipalign" -P 16 -f -v 4 modifications/dist/XHYN-R-unsigned.apk modifications/dist/XHYN-V-0.1-aligned.apk
-          "$BUILD_TOOLS/apksigner" sign --ks "$KEY" --ks-key-alias xhyn-v-reborn --ks-pass "file:$PASSFILE" --key-pass "file:$PASSFILE" --out modifications/dist/XHYN-R.apk modifications/dist/XHYN-V-0.1-aligned.apk
+          "$BUILD_TOOLS/zipalign" -P 16 -f -v 4 modifications/dist/XHYN-R-unsigned.apk modifications/dist/XHYN-R-aligned.apk
+          "$BUILD_TOOLS/apksigner" sign --ks "$KEY" --ks-key-alias xhyn-v-reborn --ks-pass "file:$PASSFILE" --key-pass "file:$PASSFILE" --out modifications/dist/XHYN-R.apk modifications/dist/XHYN-R-aligned.apk
           "$BUILD_TOOLS/apksigner" verify --verbose --print-certs modifications/dist/XHYN-R.apk > modifications/reports/signature-verification.txt 2>&1
           python - <<'PY'
           import hashlib,json,zipfile
@@ -135,9 +156,19 @@ jobs:
         if: always()
         shell: bash
         run: |
+          echo "Method 1 actual outcome: ${{ steps.method1.outcome }}"
+          echo "Method 2 actual outcome: ${{ steps.method2.outcome }}"
+          echo "Method 3 actual outcome: ${{ steps.method3.outcome }}"
           if [[ ! -s modifications/dist/XHYN-R.apk ]]; then
-            echo "::error::No XHYN-R.apk was produced. Check the successful build step's output path and logs."
-            echo "If no original decoded workspace is committed, add your lawful APK as original-apk/input.apk and rerun."
+            echo "APK files in modifications/dist (if any):"
+            find modifications/dist -maxdepth 1 -type f -name '*.apk' -printf '  %f (%s bytes)\n' 2>/dev/null || true
+            input_apk="$(find original-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)"
+            if [[ ! -f modifications/decoded/AndroidManifest.xml && -z "$input_apk" ]]; then
+              echo "::error::Missing base APK/workspace: there is no modifications/decoded/AndroidManifest.xml and no APK under original-apk/. This repo's modification scripts cannot make a complete app APK from zero."
+              echo "Add your own lawful base APK as original-apk/input.apk, or add the complete decoded workspace, then rerun."
+            else
+              echo "::error::No XHYN-R.apk was produced. Use the method outcomes above to identify the build error."
+            fi
             exit 1
           fi
           echo "APK exists: modifications/dist/XHYN-R.apk"
