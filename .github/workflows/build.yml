@@ -46,6 +46,11 @@ jobs:
         if: steps.method1.outcome != 'success'
         continue-on-error: true
         uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: '12266719'
+          accept-android-sdk-licenses: true
+          log-accepted-android-sdk-licenses: false
+          packages: 'platform-tools build-tools;35.0.0'
 
       - name: "Method 2 — install Apktool and Android build tools"
         id: method2
