@@ -12,12 +12,12 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-22.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
-      - name: Check out Test branch
+      - name: Check out selected branch
         uses: actions/checkout@v4
         with:
-          ref: Test
+          ref: ${{ github.ref_name }}
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -30,37 +30,120 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Check required private/local build inputs
+      # Method 1: use the repository's existing builder exactly as requested.
+      - name: "Method 1 — existing Python APK builder"
+        id: method1
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p modifications/dist modifications/reports
+          python modifications/scripts/build_apk.py
+
+      # Method 2: fetch build tools, optionally decode a user-provided APK,
+      # then retry the existing Python builder with those tools available.
+      - name: "Set up Android SDK tools for fallback methods"
+        if: steps.method1.outcome != 'success'
+        continue-on-error: true
+        uses: android-actions/setup-android@v3
+
+      - name: "Method 2 — install Apktool and Android build tools"
+        id: method2
+        if: steps.method1.outcome != 'success'
+        continue-on-error: true
         shell: bash
         run: |
           set -euo pipefail
-          required=(
-            "modifications/decoded/AndroidManifest.xml"
-            "modifications/decoded/lib/arm64-v8a"
-            "tools/apktool.jar"
-            "recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar"
-          )
-          missing=0
-          for path in "${required[@]}"; do
-            if [[ ! -e "$path" ]]; then
-              echo "::error::Missing required build input: $path"
-              missing=1
-            fi
-          done
-          if [[ "$missing" -ne 0 ]]; then
-            echo
-            echo "This repository is a modification layer, not a complete APK build kit."
-            echo "Supply the missing inputs from your own lawful local build workspace, then run this workflow again."
+          mkdir -p tools modifications/decoded modifications/dist modifications/reports
+          # Download the latest official Apktool release JAR from its GitHub release assets.
+          python - <<'PY'
+          import json, urllib.request
+          api = "https://api.github.com/repos/iBotPeaches/Apktool/releases/latest"
+          req = urllib.request.Request(api, headers={"Accept":"application/vnd.github+json","User-Agent":"XHYN-V-Android-Builder"})
+          with urllib.request.urlopen(req, timeout=30) as r:
+              release = json.load(r)
+          assets = [a for a in release.get("assets", []) if a["name"].lower().endswith(".jar") and "small" not in a["name"].lower()]
+          if not assets:
+              raise SystemExit("No official Apktool JAR asset found in latest release")
+          asset = next((a for a in assets if a["name"].lower().startswith("apktool_")), assets[0])
+          req = urllib.request.Request(asset["browser_download_url"], headers={"User-Agent":"XHYN-Android-Builder"})
+          with urllib.request.urlopen(req, timeout=90) as r, open("tools/apktool.jar","wb") as out:
+              out.write(r.read())
+          print("Downloaded", asset["name"])
+          PY
+          yes | sdkmanager --licenses >/dev/null || true
+          sdkmanager --install "build-tools;35.0.0" "platform-tools"
+          mkdir -p recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui
+          cp "$ANDROID_HOME/build-tools/35.0.0/lib/apksigner.jar" recovered/hotfix2/extracted/XHYN-V-r30-Hotfix2/toolchain/android-ui/apksigner.jar
+          # If a lawful input APK was added to original-apk/, reconstruct the decoded
+          # workspace from it. Otherwise preserve any decoded workspace already present.
+          input_apk="$(find original-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)"
+          if [[ -n "$input_apk" && ! -f modifications/decoded/AndroidManifest.xml ]]; then
+            rm -rf modifications/decoded
+            java -jar tools/apktool.jar d -f "$input_apk" -o modifications/decoded
+          fi
+          test -f modifications/decoded/AndroidManifest.xml
+          test -d modifications/decoded/lib/arm64-v8a
+          python modifications/scripts/build_apk.py
+
+      # Method 3: bypass the custom Python script and build/sign directly with
+      # Apktool + Android SDK zipalign/apksigner, if a decoded workspace exists.
+      - name: "Method 3 — direct Apktool build and Android SDK signing"
+        id: method3
+        if: steps.method1.outcome != 'success' && steps.method2.outcome != 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p modifications/dist modifications/reports modifications/signing
+          DECODED="modifications/decoded"
+          APKTOOL="tools/apktool.jar"
+          BUILD_TOOLS="$ANDROID_HOME/build-tools/35.0.0"
+          test -f "$DECODED/AndroidManifest.xml" || { echo "::error::No decoded AndroidManifest.xml. Add a lawful input APK at original-apk/ or provide the decoded workspace."; exit 1; }
+          test -d "$DECODED/lib/arm64-v8a" || { echo "::error::No ARM64 native libraries in decoded workspace."; exit 1; }
+          test -f "$APKTOOL" || { echo "::error::Apktool JAR is unavailable."; exit 1; }
+          test -x "$BUILD_TOOLS/apksigner" || { echo "::error::Android SDK apksigner is unavailable."; exit 1; }
+          test -x "$BUILD_TOOLS/zipalign" || { echo "::error::Android SDK zipalign is unavailable."; exit 1; }
+          KEY="modifications/signing/xhyn-v-reborn.p12"
+          PASSFILE="modifications/signing/password.txt"
+          if [[ ! -f "$KEY" ]]; then
+            umask 077
+            python -c 'import secrets; print(secrets.token_urlsafe(40))' > "$PASSFILE"
+            keytool -genkeypair -keystore "$KEY" -storetype PKCS12 -storepass:file "$PASSFILE" -keypass:file "$PASSFILE" -alias xhyn-v-reborn -keyalg RSA -keysize 3072 -validity 10000 -dname "CN=XHYN V, O=XHYN PH, C=PH"
+          fi
+          java -jar "$APKTOOL" b "$DECODED" -o modifications/dist/XHYN-V-0.1-unsigned.apk
+          "$BUILD_TOOLS/zipalign" -P 16 -f -v 4 modifications/dist/XHYN-V-0.1-unsigned.apk modifications/dist/XHYN-V-0.1-aligned.apk
+          "$BUILD_TOOLS/apksigner" sign --ks "$KEY" --ks-key-alias xhyn-v-reborn --ks-pass "file:$PASSFILE" --key-pass "file:$PASSFILE" --out modifications/dist/XHYN-V-0.1.apk modifications/dist/XHYN-V-0.1-aligned.apk
+          "$BUILD_TOOLS/apksigner" verify --verbose --print-certs modifications/dist/XHYN-V-0.1.apk > modifications/reports/signature-verification.txt 2>&1
+          python - <<'PY'
+          import hashlib,json,zipfile
+          from pathlib import Path
+          apk=Path("modifications/dist/XHYN-V-0.1.apk")
+          with zipfile.ZipFile(apk) as z:
+              bad=z.testzip()
+              if bad: raise SystemExit("APK ZIP verification failed: "+bad)
+              names=z.namelist()
+              if "classes.dex" not in names: raise SystemExit("APK is missing classes.dex")
+              libs=[n for n in names if n.startswith("lib/arm64-v8a/") and n.endswith(".so")]
+              if not libs: raise SystemExit("APK has no ARM64 native libraries")
+          report={"file":apk.name,"bytes":apk.stat().st_size,"sha256":hashlib.sha256(apk.read_bytes()).hexdigest(),"signature_verified":True,"device_gameplay_tested":False,"arm64_native_library_count":len(libs)}
+          Path("modifications/reports/apk-verification.json").write_text(json.dumps(report,indent=2)+"\n")
+          print(json.dumps(report,indent=2))
+          PY
+
+      - name: Confirm an APK was produced
+        if: always()
+        shell: bash
+        run: |
+          if [[ ! -s modifications/dist/XHYN-V-0.1.apk ]]; then
+            echo "::error::All three build methods failed. See the method logs above."
+            echo "If no original decoded workspace is committed, add your lawful APK as original-apk/input.apk and rerun."
             exit 1
           fi
-
-      - name: Prepare report directory
-        run: mkdir -p modifications/reports
-
-      - name: Build and sign APK
-        run: python modifications/scripts/build_apk.py
+          echo "APK exists: modifications/dist/XHYN-V-0.1.apk"
 
       - name: Upload APK and verification reports
+        if: always() && hashFiles('modifications/dist/XHYN-V-0.1.apk') != ''
         uses: actions/upload-artifact@v4
         with:
           name: XHYN-V-APK
@@ -68,5 +151,5 @@ jobs:
             modifications/dist/XHYN-V-0.1.apk
             modifications/reports/signature-verification.txt
             modifications/reports/apk-verification.json
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 7
