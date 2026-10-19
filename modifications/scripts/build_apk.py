@@ -100,7 +100,7 @@ with zipfile.ZipFile(final) as z, final.open("rb") as stream:
         data_offset = entry.header_offset + 30 + name_len + extra_len
         alignment = 16384 if entry.filename.startswith("lib/") and entry.filename.endswith(".so") else 4
         assert data_offset % alignment == 0, (entry.filename, data_offset)
-    assert z.read("classes.dex").startswith(b"dex\\n"), "APK classes.dex is invalid"
+    assert z.read("classes.dex").startswith(b"dex\n"), "APK classes.dex is invalid"
     for name, digest in fingerprints.items():
         assert hashlib.sha256(z.read("lib/arm64-v8a/" + name)).hexdigest() == digest
     names = z.namelist()
